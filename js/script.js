@@ -55,8 +55,8 @@ export async function searchDefinition() {
   const word = document.getElementById("searchWord").value;
   const responseDiv = document.getElementById("response");
 
-  if (!word || !/^[a-zA-Z]+$/.test(word)) {
-    responseDiv.innerText = MISSING_SEARCH_WORD_MESSAGE + ONLY_ALPHABETICS_MESSAGE;
+  if (!word) {
+    responseDiv.innerText = MISSING_SEARCH_WORD_MESSAGE;
     return;
   }
 
