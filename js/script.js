@@ -8,6 +8,7 @@ import {
   NOT_FOUND_MESSAGE,
   NETWORK_ERROR_MESSAGE,
   SUBMIT_FAIL_MESSAGE,
+  ONLY_ALPHABETICS_MESSAGE,
 } from "../lang/en/en.js";
 
 const apiUrl = "https://nainzhou.com/COMP4537/labs/4/api/definitions";
