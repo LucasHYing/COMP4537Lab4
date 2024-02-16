@@ -56,7 +56,7 @@ export async function searchDefinition() {
   const responseDiv = document.getElementById("response");
 
   if (!word || !/^[a-zA-Z]+$/.test(word)) {
-    responseDiv.innerText = MISSING_SEARCH_WORD_MESSAGE + " Only alphabetic characters are allowed.";
+    responseDiv.innerText = MISSING_SEARCH_WORD_MESSAGE + ONLY_ALPHABETICS_MESSAGE;
     return;
   }
 

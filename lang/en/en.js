@@ -9,3 +9,4 @@ export const NOT_FOUND_MESSAGE = "Definition not found.";
 export const NETWORK_ERROR_MESSAGE = "Network response was not ok";
 export const SUBMIT_FAIL_MESSAGE =
   "Failed to store the definition. Please try again.";
+export const ONLY_ALPHABETICS_MESSAGE = " Only alphabetic characters are allowed.";
