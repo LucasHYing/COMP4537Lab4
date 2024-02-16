@@ -58,7 +58,7 @@ export async function submitDefinition() {
   } catch (error) {
     // Catch and log any errors, displaying a failure message to the user.
     console.error("Error:", error);
-    responseDiv.innerText = SUBMIT_FAIL_MESSAGE;
+    responseDiv.innerText = data.message || SUBMIT_FAIL_MESSAGE;
   }
 }
 
