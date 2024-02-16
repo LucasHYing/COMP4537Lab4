@@ -60,6 +60,11 @@ export async function searchDefinition() {
     return;
   }
 
+  if (!/^[a-zA-Z]+$/.test(word)) {
+    responseDiv.innerText = ONLY_ALPHABETICS_MESSAGE;
+    return;
+  }
+
   responseDiv.innerText = SEARCHING_MESSAGE;
 
   try {
