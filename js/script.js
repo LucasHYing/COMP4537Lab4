@@ -17,14 +17,15 @@ export async function submitDefinition() {
   const word = document.getElementById("word").value;
   const definition = document.getElementById("definition").value;
   const responseDiv = document.getElementById("response");
+  const validWordRegex = /^[A-Za-z]+(-[A-Za-z]+)*$/;
 
   if (!word || !definition) {
     responseDiv.innerText = MISSING_FIELDS_MESSAGE;
     return;
   }
 
-  // Check if the word or definition contains numbers or special characters
-  if (!/^[a-zA-Z]+$/.test(word) || !/^[a-zA-Z]+$/.test(definition)) {
+  // Check if the word contains numbers or special characters
+  if (!validWordRegex.test(word)) {
     responseDiv.innerText = ONLY_ALPHABETICS_MESSAGE;
     return;
   }
@@ -60,13 +61,14 @@ document.addEventListener("DOMContentLoaded", () => {
 export async function searchDefinition() {
   const word = document.getElementById("searchWord").value;
   const responseDiv = document.getElementById("response");
+  const validWordRegex = /^[A-Za-z]+(-[A-Za-z]+)*$/;
 
   if (!word) {
     responseDiv.innerText = MISSING_SEARCH_WORD_MESSAGE;
     return;
   }
 
-  if (!/^[a-zA-Z]+$/.test(word)) {
+  if (!validWordRegex.test(word)) {
     responseDiv.innerText = ONLY_ALPHABETICS_MESSAGE;
     return;
   }
