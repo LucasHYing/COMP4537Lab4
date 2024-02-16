@@ -73,6 +73,7 @@ export async function searchDefinition() {
     responseDiv.innerText = ONLY_ALPHABETICS_MESSAGE;
     return;
   }
+  
   responseDiv.innerText = SEARCHING_MESSAGE;
 
   try {
