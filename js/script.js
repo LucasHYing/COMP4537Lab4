@@ -63,13 +63,8 @@ export async function searchDefinition() {
   const responseDiv = document.getElementById("response");
   const validWordRegex = /^[A-Za-z]+(-[A-Za-z]+)*$/;
 
-  if (!word) {
-    responseDiv.innerText = MISSING_SEARCH_WORD_MESSAGE;
-    return;
-  }
-
-  if (!validWordRegex.test(word)) {
-    responseDiv.innerText = ONLY_ALPHABETICS_MESSAGE;
+  if (!word || !validWordRegex.test(word)) {
+    responseDiv.innerText = MISSING_SEARCH_WORD_MESSAGE + ONLY_ALPHABETICS_MESSAGE;
     return;
   }
 
