@@ -23,6 +23,15 @@ export async function submitDefinition() {
     return;
   }
 
+  // Regular expression to detect numbers and special characters
+  const invalidCharsRegex = /[0-9`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+  // Check if the word or definition contains numbers or special characters
+  if (invalidCharsRegex.test(word) || invalidCharsRegex.test(definition)) {
+    responseDiv.innerText = ONLY_ALPHABETICS_MESSAGE;
+    return;
+  }
+
   try {
     const response = await fetch(apiUrl, {
       method: "POST",
