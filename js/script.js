@@ -25,20 +25,6 @@ export async function submitDefinition() {
   // Regular expression to ensure word contains only letters (and hyphens for compound words).
   const validWordRegex = /^[A-Za-z]+(-[A-Za-z]+)*$/;
 
-  // Check for empty input fields and display an error message if any are found.
-  if (!word || !definition) {
-    const errMsg = { message: MISSING_FIELDS_MESSAGE };
-    responseDiv.innerText = errMsg.message;
-    return;
-  }
-
-  // Validate the word against the regular expression.
-  if (!validWordRegex.test(word)) {
-    const errMsg = { message: ONLY_ALPHABETICS_MESSAGE };
-    responseDiv.innerText = errMsg.message;
-    return;
-  }
-
   // Attempt to send a POST request to the server with the new word and definition.
   try {
     const response = await fetch(apiUrl, {
@@ -54,6 +40,20 @@ export async function submitDefinition() {
     if (!response.ok) {
       // Handle server-side errors by displaying the server's error message.
       throw new Error(data.message || NETWORK_ERROR_MESSAGE);
+    }
+
+    // Check for empty input fields and display an error message if any are found.
+    if (!word || !definition) {
+      const errMsg = { message: MISSING_FIELDS_MESSAGE };
+      responseDiv.innerText = data.message || errMsg.message;
+      return;
+    }
+
+    // Validate the word against the regular expression.
+    if (!validWordRegex.test(word)) {
+      const errMsg = { message: ONLY_ALPHABETICS_MESSAGE };
+      responseDiv.innerText = data.message || errMsg.message;
+      return;
     }
     
     // Display a success message from the server or a default success message.
@@ -79,21 +79,6 @@ export async function searchDefinition() {
   const word = document.getElementById("searchWord").value;
   const responseDiv = document.getElementById("response");
   const validWordRegex = /^[A-Za-z]+(-[A-Za-z]+)*$/;
-
-  // In searchDefinition function
-  // Validate the input for the search term.
-  if (!word) {
-    const errMsg = { message: MISSING_SEARCH_WORD_MESSAGE };
-    responseDiv.innerText = errMsg.message;
-    return;
-  }
-
-  if (!validWordRegex.test(word)) {
-    const errMsg = { message: ONLY_ALPHABETICS_MESSAGE };
-    responseDiv.innerText = errMsg.message;
-    return;
-  }
-
   
   // Display a searching message to inform the user that the operation is in progress.
   responseDiv.innerText = SEARCHING_MESSAGE;
@@ -108,6 +93,19 @@ export async function searchDefinition() {
         // Handle server-side errors by displaying the server's error message.
         throw new Error(data.message || NOT_FOUND_MESSAGE);
       }
+
+      // Validate the input for the search term.
+      if (!word) {
+        const errMsg = { message: MISSING_SEARCH_WORD_MESSAGE };
+        responseDiv.innerText = data.message || errMsg.message;
+        return;
+      }
+
+      if (!validWordRegex.test(word)) {
+        const errMsg = { message: ONLY_ALPHABETICS_MESSAGE };
+        responseDiv.innerText = data.message || errMsg.message;
+        return;
+      }
       
       // Display the found definition or a default message if not found.
       if (data.definition) {
@@ -120,7 +118,6 @@ export async function searchDefinition() {
       // Display the error message from the catch block or a default error message.
       responseDiv.innerText = error.message || ERROR_MESSAGE;
     }
-  
 }
 
 // Attaching the searchDefinition event handler to the search button after the DOM is loaded.
