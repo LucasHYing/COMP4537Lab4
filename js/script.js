@@ -56,10 +56,16 @@ export async function submitDefinition() {
     const data = await response.json();
     responseDiv.innerText = data.message || SUBMIT_SUCCESS_MESSAGE;
   } catch (error) {
-    // Catch and log any errors, displaying a failure message to the user.
     console.error("Error:", error);
-    responseDiv.innerText = data.message || SUBMIT_FAIL_MESSAGE;
+    // Attempt to parse and display the server's error message
+    error.response.json().then(err => {
+      responseDiv.innerText = err.message || SUBMIT_FAIL_MESSAGE;
+    }).catch(() => {
+      // Fallback if the error response cannot be parsed
+      responseDiv.innerText = SUBMIT_FAIL_MESSAGE;
+    });
   }
+
 }
 
 // Event listener for DOMContentLoaded to ensure the DOM is fully loaded before attaching event handlers.
@@ -108,10 +114,16 @@ export async function searchDefinition() {
       responseDiv.innerText = data.message || NOT_FOUND_MESSAGE;
     }
   } catch (error) {
-    // Catch and log any errors, displaying an error message to the user.
     console.error("Error:", error);
-    responseDiv.innerText = ERROR_MESSAGE;
+    // Attempt to parse and display the server's error message
+    error.response.json().then(err => {
+      responseDiv.innerText = err.message || ERROR_MESSAGE;
+    }).catch(() => {
+      // Fallback if the error response cannot be parsed
+      responseDiv.innerText = ERROR_MESSAGE;
+    });
   }
+
 }
 
 // Attaching the searchDefinition event handler to the search button after the DOM is loaded.
