@@ -29,14 +29,14 @@ export async function submitDefinition() {
   if (!word || !definition) {
     const errMsg = { message: MISSING_FIELDS_MESSAGE };
     responseDiv.innerText = errMsg.message;
-    return;
+    return; // Exit early if any field is empty.
   }
 
   // Validate the word against the regular expression.
   if (!validWordRegex.test(word)) {
     const errMsg = { message: ONLY_ALPHABETICS_MESSAGE };
     responseDiv.innerText = errMsg.message;
-    return;
+    return; // Exit early if the word doesn't match the regex pattern.
   }
 
   // Attempt to send a POST request to the server with the new word and definition.
