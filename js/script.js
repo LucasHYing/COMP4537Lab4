@@ -27,13 +27,15 @@ export async function submitDefinition() {
 
   // Check for empty input fields and display an error message if any are found.
   if (!word || !definition) {
-    responseDiv.innerText = MISSING_FIELDS_MESSAGE;
+    const errMsg = { message: MISSING_FIELDS_MESSAGE };
+    responseDiv.innerText = errMsg.message;
     return;
   }
 
   // Validate the word against the regular expression.
   if (!validWordRegex.test(word)) {
-    responseDiv.innerText = ONLY_ALPHABETICS_MESSAGE;
+    const errMsg = { message: ONLY_ALPHABETICS_MESSAGE };
+    responseDiv.innerText = errMsg.message;
     return;
   }
 
@@ -47,25 +49,20 @@ export async function submitDefinition() {
       body: JSON.stringify({ word, definition }),
     });
 
-    // Handle non-OK responses by throwing an error.
+    const data = await response.json(); // Parse JSON response in all cases.
+    
     if (!response.ok) {
-      throw new Error(NETWORK_ERROR_MESSAGE);
+      // Handle server-side errors by displaying the server's error message.
+      throw new Error(data.message || NETWORK_ERROR_MESSAGE);
     }
-
-    // Parse the JSON response and display a success message.
-    const data = await response.json();
+    
+    // Display a success message from the server or a default success message.
     responseDiv.innerText = data.message || SUBMIT_SUCCESS_MESSAGE;
   } catch (error) {
     console.error("Error:", error);
-    // Attempt to parse and display the server's error message
-    error.response.json().then(err => {
-      responseDiv.innerText = err.message || SUBMIT_FAIL_MESSAGE;
-    }).catch(() => {
-      // Fallback if the error response cannot be parsed
-      responseDiv.innerText = SUBMIT_FAIL_MESSAGE;
-    });
+    // Display the error message from the catch block or a default failure message.
+    responseDiv.innerText = error.message || SUBMIT_FAIL_MESSAGE;
   }
-
 }
 
 // Event listener for DOMContentLoaded to ensure the DOM is fully loaded before attaching event handlers.
@@ -83,47 +80,47 @@ export async function searchDefinition() {
   const responseDiv = document.getElementById("response");
   const validWordRegex = /^[A-Za-z]+(-[A-Za-z]+)*$/;
 
+  // In searchDefinition function
   // Validate the input for the search term.
   if (!word) {
-    responseDiv.innerText = MISSING_SEARCH_WORD_MESSAGE;
+    const errMsg = { message: MISSING_SEARCH_WORD_MESSAGE };
+    responseDiv.innerText = errMsg.message;
     return;
   }
 
   if (!validWordRegex.test(word)) {
-    responseDiv.innerText = ONLY_ALPHABETICS_MESSAGE;
+    const errMsg = { message: ONLY_ALPHABETICS_MESSAGE };
+    responseDiv.innerText = errMsg.message;
     return;
   }
+
   
   // Display a searching message to inform the user that the operation is in progress.
   responseDiv.innerText = SEARCHING_MESSAGE;
 
-  // Attempt to fetch the definition of the word from the server.
-  try {
-    const response = await fetch(`${apiUrl}/?word=${word}`, { method: "GET" });
-
-    // Handle non-OK responses by throwing an error.
-    if (!response.ok) {
-      throw new Error(NETWORK_ERROR_MESSAGE);
+    // Attempt to fetch the definition of the word from the server.
+    try {
+      const response = await fetch(`${apiUrl}/?word=${word}`, { method: "GET" });
+  
+      const data = await response.json(); // Parse JSON response in all cases.
+      
+      if (!response.ok) {
+        // Handle server-side errors by displaying the server's error message.
+        throw new Error(data.message || NOT_FOUND_MESSAGE);
+      }
+      
+      // Display the found definition or a default message if not found.
+      if (data.definition) {
+        responseDiv.innerText = `"${word}": ${data.definition}`;
+      } else {
+        responseDiv.innerText = data.message || NOT_FOUND_MESSAGE;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      // Display the error message from the catch block or a default error message.
+      responseDiv.innerText = error.message || ERROR_MESSAGE;
     }
-
-    // Parse the JSON response and display the definition or a not-found message.
-    const data = await response.json();
-    if (data.definition) {
-      responseDiv.innerText = `"${word}": ${data.definition}`;
-    } else {
-      responseDiv.innerText = data.message || NOT_FOUND_MESSAGE;
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    // Attempt to parse and display the server's error message
-    error.response.json().then(err => {
-      responseDiv.innerText = err.message || ERROR_MESSAGE;
-    }).catch(() => {
-      // Fallback if the error response cannot be parsed
-      responseDiv.innerText = ERROR_MESSAGE;
-    });
-  }
-
+  
 }
 
 // Attaching the searchDefinition event handler to the search button after the DOM is loaded.
